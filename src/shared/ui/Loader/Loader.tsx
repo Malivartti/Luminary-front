@@ -1,4 +1,4 @@
-import LoaderSVG from '@shared/assets/icons/loader.svg';
+import LoaderIcon from '@shared/assets/icons/loader.svg';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -20,7 +20,7 @@ const Loader: React.FC<LoaderProps> = ({
   size = 'l',
   ...props
 }) => (
-  <LoaderSVG
+  <LoaderIcon
     className={classNames(cls.Loader, className)}
     width={sizeToPixles[size]}
     height={sizeToPixles[size]}
