@@ -2,7 +2,7 @@
 
 
 import EnvPage from '@pages/EnvPage/EnvPage';
-import EnvsPage from '@pages/EnvsPage/EnvsPage';
+import EnvsPage from '@pages/EnvsPage/ui/EnvsPage';
 import NotFoundPage from '@pages/NotFoundPage';
 import { Navigate, RouteProps } from 'react-router-dom';
 

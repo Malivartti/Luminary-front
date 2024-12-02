@@ -1,6 +1,8 @@
 import './styles/index.scss';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import RootLayout from '@widgets/RootLayout';
+import { SkeletonTheme } from 'react-loading-skeleton';
 import { BrowserRouter } from 'react-router-dom';
 
 import AppRouter from './providers/AppRouter';
@@ -13,9 +15,14 @@ function App() {
     <BrowserRouter>
       <ErrorBoundary>
         <ThemeProvider>
-          <RootLayout>
-            <AppRouter />
-          </RootLayout>
+          <SkeletonTheme
+            baseColor="var(--skeleton-base-color)"
+            highlightColor="var(--skeleton-highlight-color)"
+          >
+            <RootLayout>
+              <AppRouter />
+            </RootLayout>
+          </SkeletonTheme>
         </ThemeProvider>
       </ErrorBoundary>
     </BrowserRouter>

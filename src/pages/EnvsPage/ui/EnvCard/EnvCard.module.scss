@@ -1,0 +1,27 @@
+.EnvCard {
+  display: flex;
+  flex-direction: column;
+  background: var(--neutral-color);
+  padding: 24px 12px;
+  height: 100%;
+  cursor: pointer;
+  transition: background var(--transition-color-ms) linear,
+              box-shadow var(--transition-color-ms) linear;
+
+  &:hover {
+    box-shadow: 0 4px 10px rgb(0 0 0 / 25%);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+  }
+
+  &__description {
+    margin-bottom: 8px;
+  }
+
+  &__date {
+    text-align: end;
+    margin-top: auto;
+  }
+}

@@ -23,6 +23,10 @@
     background: var(--tertiary-color);
     cursor: default;
   }
+  
+  &:disabled:hover {
+    background: var(--tertiary-color);
+  }
 
   &_clear {
     background: none;

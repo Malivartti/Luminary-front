@@ -32,7 +32,7 @@ const Input: React.FC<InputProps> = ({
       setInnerValue(e.target.value);
       onChange(e.target.value);
     }
-  }, [innerValue, maxLength, onChange]);
+  }, [maxLength, onChange]);
 
   useEffect(() => {
     setInnerValue(value);
