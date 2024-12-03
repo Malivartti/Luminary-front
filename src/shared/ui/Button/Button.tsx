@@ -4,11 +4,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import cls from './Button.module.scss';
-
-export enum ButtonTheme {
-  CLEAR = 'clear',
-  OUTLINE = 'outline',
-}
+import { ButtonTheme } from './ButtonTheme';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;

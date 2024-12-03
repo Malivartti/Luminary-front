@@ -1,4 +1,4 @@
-import { EnvModel } from '@entities/envs/models';
+import { EnvModel } from '@entities/envs/model';
 import { formatDDMMYYYYHHMM } from '@shared/lib/date';
 import Text from '@shared/ui/Text';
 import { FC } from 'react';

@@ -1,3 +1,4 @@
+import envsStore from '@entities/envs';
 import envsPageStore from '@pages/EnvsPage/store';
 import Button from '@shared/ui/Button';
 import Input from '@shared/ui/Input';
@@ -42,7 +43,7 @@ const EnvModal = observer(() => {
         <Button
           className={cls.EnvModal__btn}
           type='submit'
-          loading={envsPageStore.isLoading}
+          loading={envsStore.network.isLoading}
         >
           Создать
         </Button>

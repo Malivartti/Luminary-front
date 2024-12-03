@@ -1,9 +1,10 @@
 import EnvList from './EnvList';
 import EnvModal from './EnvModal';
+import cls from './EnvsPage.module.scss';
 
 const EnvsPage = () => {
   return (
-    <div>
+    <div className={cls.EnvsPage}>
       <EnvModal />
       <EnvList />
     </div>

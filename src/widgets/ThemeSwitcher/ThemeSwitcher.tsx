@@ -20,8 +20,8 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
     >
       {
         theme === Theme.LIGHT
-          ? <SunIcon />
-          : <MoonIcon />
+          ? <SunIcon className={cls.ThemeSwitcher__icon}/>
+          : <MoonIcon className={cls.ThemeSwitcher__icon}/>
       }
     </button>
   );

@@ -1,11 +1,11 @@
-import { Meta } from '@entities/Meta';
+import NetworkStore from '@entities/network';
 import axios, { AxiosResponse } from 'axios';
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { endpoints } from '../api';
-import { EnvApi, EnvApiReqCreate, EnvApiReqUpdate, EnvModel, normalizeEnv, normalizeEnvs } from '../models';
+import { EnvApi, EnvApiReqCreate, EnvApiReqUpdate, EnvModel, normalizeEnv, normalizeEnvs } from '../model';
 
-type PrivateFields = '_envs' | '_env' | '_meta' | '_message';
+type PrivateFields = '_envs' | '_env';
 
 class EnvsStore {
   private _env: EnvModel | null = null;
@@ -100,23 +100,15 @@ class EnvsStore {
       description: 'Объект создается с помощью фигурных скобок `{}`.',
       updatedAt: new Date(),
     }
-  
   ];
-  private _meta: Meta = Meta.initial;
-  private _message: string = '';
+  readonly network = new NetworkStore();
 
   constructor() {
     makeObservable<EnvsStore, PrivateFields>(this, {
       _envs: observable,
       _env: observable,
-      _meta: observable,
-      _message: observable,
       envs: computed,
       env: computed,
-      isLoading: computed,
-      isSuccess: computed,
-      isError: computed,
-      message: computed,
       getEnvs: action,
       getEnv: action,
       createEnv: action,
@@ -133,24 +125,8 @@ class EnvsStore {
     return this._env;
   }
 
-  get isLoading(): boolean {
-    return this._meta === Meta.loading;
-  }
-
-  get isSuccess(): boolean {
-    return this._meta === Meta.success;
-  }
-
-  get isError(): boolean {
-    return this._meta === Meta.error;
-  }
-
-  get message(): string {
-    return this._message;
-  }
-
   async getEnv(id: string | number) {
-    this._meta = Meta.loading;
+    this.network.loading();
     this._env = null;
     const url = endpoints.getOne(id);
 
@@ -158,19 +134,18 @@ class EnvsStore {
       const res: AxiosResponse<EnvApi> = await axios.get(url);
       runInAction(() => {
         this._env = normalizeEnv(res.data);
-        this._meta = Meta.success;
+        this.network.success();
       });
     } catch (e) {
       runInAction(() => {
-        this._message = 'Не удалось получить окружение';
-        this._meta = Meta.error;
+        this.network.error('Не удалось получить окружение');
       });
       console.log(e);
     }
   }
 
   async getEnvs() {
-    this._meta = Meta.loading;
+    this.network.loading();
     this._envs = null;
     const url = endpoints.get();
 
@@ -178,19 +153,18 @@ class EnvsStore {
       const res: AxiosResponse<EnvApi[]> = await axios.get(url);
       runInAction(() => {
         this._envs = normalizeEnvs(res.data);
-        this._meta = Meta.success;
+        this.network.success();
       });
     } catch(e) {
       runInAction(() => {
-        this._message = 'Не удалось получить окружения';
-        this._meta = Meta.error;
+        this.network.error('Не удалось получить окружения');
       });
       console.log(e);
     }
   }
 
   async createEnv(data: EnvApiReqCreate) {
-    this._meta = Meta.loading;
+    this.network.loading();
     this._env = null;
     const url = endpoints.create();
 
@@ -198,17 +172,17 @@ class EnvsStore {
       await axios.post(url, {
         data,
       });
+      this.network.success();
     } catch(e) {
       runInAction(() => {
-        this._message = 'Не удалось создать окружение';
-        this._meta = Meta.error;
+        this.network.error('Не удалось создать окружение');
       });
       console.log(e);
     }
   }
 
   async updateEnv(id: string | number, data: EnvApiReqUpdate) {
-    this._meta = Meta.loading;
+    this.network.loading();
     this._env = null;
     const url = endpoints.update(id);
 
@@ -216,30 +190,28 @@ class EnvsStore {
       await axios.put(url, {
         data,
       });
+      this.network.success();
     } catch(e) {
       runInAction(() => {
-        this._message = 'Не удалось обновить окружение';
-        this._meta = Meta.error;
+        this.network.error('Не удалось обновить окружение');
       });
       console.log(e);
     }
   }
 
   async deleteEnv(id: string | number) {
-    this._meta = Meta.loading;
+    this.network.loading();
     this._env = null;
     const url = endpoints.delete(id);
 
     try {
       await axios.delete(url);
       runInAction(() => {
-        this._message = 'Окружение успешно удалено';
-        this._meta = Meta.success;
+        this.network.success('Окружение успешно удалено');
       });
     } catch(e) {
       runInAction(() => {
-        this._message = 'Не удалось удалить окружение';
-        this._meta = Meta.error;
+        this.network.error('Не удалось удалить окружение');
       });
       console.log(e);
     }

@@ -1,1 +1,1 @@
-export { default } from './EnvPage.lazy';
+export { default } from './ui/EnvPage.lazy';

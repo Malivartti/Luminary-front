@@ -1,5 +1,5 @@
 import envsStore from '@entities/envs';
-import { EnvApiReqCreate } from '@entities/envs/models';
+import { EnvApiReqCreate } from '@entities/envs/model';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 type PrivateFields = '_title' | '_titleError' | '_description' | '_isOpenModal'
@@ -20,7 +20,6 @@ class EnvsPageStore {
       titleError: computed,
       description: computed,
       isOpenModal: computed,
-      isLoading: computed,
       setTitle: action.bound,
       setDescription: action.bound,
       setIsOpenModal: action.bound,
@@ -43,10 +42,6 @@ class EnvsPageStore {
 
   get isOpenModal(): boolean {
     return this._isOpenModal;
-  }
-
-  get isLoading(): boolean {
-    return envsStore.isLoading;
   }
 
   setTitle(title: string): void {
