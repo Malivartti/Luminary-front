@@ -1,6 +1,7 @@
 import { useTheme } from '@app/providers/ThemeProvider';
 import classNames from 'classnames';
 import { FC, ReactNode } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import ContainerLayout from '../ContainerLayout';
 import Header from '../Header';
@@ -16,6 +17,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     <div className={classNames('app', theme)}>
       <Header />
       <ContainerLayout>
+        <ToastContainer />
         {children}
       </ContainerLayout>
     </div>
