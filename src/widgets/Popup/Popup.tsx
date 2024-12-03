@@ -7,9 +7,10 @@ type PopupProps = {
   className?: string;
   button: ReactNode;
   children: ReactNode;
+  width?: number;
 }
 
-const Popup: FC<PopupProps> = ({ className, button, children }) => {
+const Popup: FC<PopupProps> = ({ className, button, children, width }) => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const popupRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -72,10 +73,16 @@ const Popup: FC<PopupProps> = ({ className, button, children }) => {
       >
         {button}
       </button>
-      <div className={classNames(
-        cls.Popup__list,
-        { [cls.Popup__list_hide]: !isShow }
-      )} ref={listRef}>
+      <div 
+        className={classNames(
+          cls.Popup__list,
+          { [cls.Popup__list_hide]: !isShow }
+        )}
+        ref={listRef}
+        style={{
+          width: width ?? undefined,
+        }}
+      >
         {children}
       </div>
     </div>

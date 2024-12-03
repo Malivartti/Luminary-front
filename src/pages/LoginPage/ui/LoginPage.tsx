@@ -4,20 +4,21 @@ import { useTrackMetaAndToast } from '@shared/hooks/useTrackMetaAndToast';
 import Button, { ButtonTheme } from '@shared/ui/Button';
 import Input from '@shared/ui/Input';
 import Text from '@shared/ui/Text';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FormEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import loginPageStore from '../store';
+import LoginPageStore from '../store/LoginPageStore';
 import cls from './LoginPage.module.scss';
 
 const LoginPage = observer(() => {
+  const loginPageStore = useLocalObservable(() => new LoginPageStore());
   const navigate = useNavigate();
 
   const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     loginPageStore.login();
-  }, []);
+  }, [loginPageStore]);
 
   const toRegister = useCallback(() => {
     navigate(AppRouteUrls.register.create());

@@ -4,14 +4,15 @@ import { useTrackMetaAndToast } from '@shared/hooks/useTrackMetaAndToast';
 import Button, { ButtonTheme } from '@shared/ui/Button';
 import Input from '@shared/ui/Input';
 import Text from '@shared/ui/Text';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FormEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import registerPageStore from '../store';
+import RegisterPageStore from '../store/RegisterPageStore';
 import cls from './RegisterPage.module.scss';
 
 const RegisterPage = observer(() => {
+  const registerPageStore = useLocalObservable(() => new RegisterPageStore());
   const navigate = useNavigate();
 
   const onSuccess = useCallback(() => {
@@ -21,7 +22,7 @@ const RegisterPage = observer(() => {
   const onSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     registerPageStore.register();
-  }, []);
+  }, [registerPageStore]);
 
   const toLogin = useCallback(() => {
     navigate(AppRouteUrls.login.create());
