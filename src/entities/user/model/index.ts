@@ -2,6 +2,7 @@ export type UserApi = {
   id: number;
   email: string;
   name: string;
+  role: Role;
   avatar: string;
 }
 
@@ -9,7 +10,14 @@ export type UserModel = {
   id: number;
   email: string;
   name: string;
+  role: Role;
   avatar: string;
+}
+
+export enum Role {
+  admin = 'admin',
+  user = 'user',
+  guest = 'guest'
 }
 
 export const normalizeUser = (raw: UserApi): UserModel => ({

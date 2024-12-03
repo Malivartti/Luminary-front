@@ -1,7 +1,8 @@
 export { default } from './store';
-import { UserApiReqCreate, UserApiReqLogin, UserApiReqUpdate } from './model';
+import { Role, UserApiReqCreate, UserApiReqLogin, UserApiReqUpdate } from './model';
 
 export {
+  Role,
   UserApiReqCreate,
   UserApiReqLogin,
   UserApiReqUpdate
