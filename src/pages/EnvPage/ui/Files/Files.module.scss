@@ -1,6 +1,14 @@
 .Files {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   &__btns {
     display: flex;
     justify-content: space-between;
+  }
+
+  &__list {
+    flex-grow: 1;
   }
 }

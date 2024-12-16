@@ -77,7 +77,7 @@ class EnvsPageStore {
     if (!this.validate()) return;
 
     const data: EnvApiReqCreate = {
-      title: this._title,
+      name: this._title,
       description: this._description,
     };
 

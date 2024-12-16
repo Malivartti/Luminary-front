@@ -50,7 +50,7 @@ class NetworkStore {
 
   error(message: string = ''): void {
     this._message = message;
-    this._meta = Meta.success;
+    this._meta = Meta.error;
   }
 }
 

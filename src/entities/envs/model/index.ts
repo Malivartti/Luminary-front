@@ -1,32 +1,36 @@
 export interface EnvApi {
   id: number;
-  title: string;
+  name: string;
   description: string;
-  updatedAt: string;
+  user: number;
+  createdAt: string;
+  editedAt: string;
 }
 
 export interface EnvModel {
   id: number;
   title: string;
   description: string;
+  createdAt: Date,
   updatedAt: Date;
 }
 
 export interface EnvApiReqCreate {
-  title: string;
+  name: string;
   description: string;
 }
 
 export interface EnvApiReqUpdate {
-  title?: string;
+  name?: string;
   description?: string;
 }
 
 export const normalizeEnv = (raw: EnvApi): EnvModel => ({
   id: raw.id,
-  title: raw.title,
+  title: raw.name,
   description: raw.description,
-  updatedAt: new Date(raw.updatedAt),
+  createdAt: new Date(raw.createdAt),
+  updatedAt: new Date(raw.editedAt),
 });
 
 export const normalizeEnvs = (raw: EnvApi[]): EnvModel[] => (

@@ -3,26 +3,24 @@ import axios, { AxiosResponse } from 'axios';
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { endpoints } from '../api';
-import { FileApi, FileModel, normalizeFiles } from '../model';
+import { FileApi, FileApiReq, FileApiReqLoad, FileModel, normalizeFiles } from '../model';
 
-type PrivateFields = '_files' | '_localFiles' | '_file'
+type PrivateFields = '_files' | '_file'
 
 class FilesStore {
   private _files: FileModel[] | null = null;
-  private _localFiles: File[] | null = null;
   private _file: FileModel | null = null;
   readonly network = new NetworkStore();
 
   constructor() {
     makeObservable<FilesStore, PrivateFields>(this, {
       _files: observable,
-      _localFiles: observable,
       _file: observable,
       files: computed,
       file: computed,
       getFiles: action,
-      // getFile: action,
-      // loadFile: action,
+      getFile: action,
+      loadFile: action,
       // updateFile: action,
       // deleteFile: action,
     });
@@ -32,16 +30,8 @@ class FilesStore {
     return this._files;
   }
 
-  get localFiles(): File[] {
-    return this._localFiles;
-  }
-
   get file(): FileModel {
     return this._file;
-  }
-
-  setLocalFiles(localFiles: File[]): void {
-    this._localFiles = [...this._localFiles, ...localFiles];
   }
 
   async getFiles(id: string | number) {
@@ -57,6 +47,43 @@ class FilesStore {
     } catch(e) {
       runInAction(() => {
         this.network.error('Не удалось получить файлы');
+      });
+      console.log(e);
+    }
+  }
+
+  async getFile(id: string | number, data: FileApiReq) {
+    this.network.loading();
+    const url = endpoints.getOne(id);
+
+    try {
+      const res: AxiosResponse<FileApi> = await axios.get(url, { data });
+      runInAction(() => {
+        this._file = res.data;
+        this.network.success();
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.network.error('Не удалось загрузить файл');
+      });
+      console.log(e);
+    }
+  }
+
+  async loadFile(id: string | number, data: FileApiReqLoad) {
+    this.network.loading();
+    const url = endpoints.load(id);
+    
+    try {
+      await axios.post(url, {
+        data,
+      });
+      runInAction(() => {
+        this.network.success();
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.network.error('Не удалось выгрузить файл');
       });
       console.log(e);
     }

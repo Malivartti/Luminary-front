@@ -1,21 +1,11 @@
 .EnvPage {
-  padding-top: var(--page-padding-top);
-  padding-bottom: var(--page-padding-bottom);
-  display: flex;
-  
-  &__main {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    margin-right: 30px;
-  }
+  padding-top: var(--navbar-height);
 
-  &__generate {
-    margin-bottom: 30px;
-    align-self: flex-end;
+  &__main {
+    display: flex;
   }
 
   &__editor {
-    margin-bottom: 50px;
+    width: 100%;
   }
 }

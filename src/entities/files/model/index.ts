@@ -1,9 +1,14 @@
 export interface FileApi {
-  file: File
+  filename: string
 }
 
 export interface FileModel {
-  file: File
+  filename: string
+  file?: string
+}
+
+export interface FileApiReq {
+  filename: string
 }
 
 export interface FileApiReqLoad {
@@ -15,7 +20,7 @@ export interface FileApiReqUpdate {
 }
 
 export const normalizeFile = (raw: FileApi): FileModel => ({
-  file: raw.file,
+  ...raw,
 });
 
 export const normalizeFiles = (raw: FileApi[]): FileModel[] => (

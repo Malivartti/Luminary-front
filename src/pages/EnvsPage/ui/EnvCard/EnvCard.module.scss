@@ -24,4 +24,18 @@
     text-align: end;
     margin-top: auto;
   }
+
+
+  &__actions {
+    position: absolute;
+    color: var(--secondary-color);
+  }
+
+  &__action {
+    padding: 5px;
+  }
+
+  &__action:not(:last-child) {
+    margin-right: 5px;
+  }
 }

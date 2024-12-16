@@ -1,9 +1,10 @@
 import './styles/index.scss';
 import 'react-loading-skeleton/dist/skeleton.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import RootLayout from '@widgets/RootLayout';
 import { SkeletonTheme } from 'react-loading-skeleton';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 import AppRouter from './providers/AppRouter';
 import ErrorBoundary from './providers/ErrorBoundary';
@@ -12,7 +13,7 @@ import ThemeProvider from './providers/ThemeProvider';
 function App() {
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ErrorBoundary>
         <ThemeProvider>
           <SkeletonTheme
@@ -25,7 +26,7 @@ function App() {
           </SkeletonTheme>
         </ThemeProvider>
       </ErrorBoundary>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

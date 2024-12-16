@@ -1,0 +1,24 @@
+.FileItem {
+  padding: 10px 15px;
+  background-color: var(--skeleton-highlight-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
+
+  &__actions {
+    color: var(--secondary-color);
+  }
+
+  &__action {
+    padding: 5px;
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}

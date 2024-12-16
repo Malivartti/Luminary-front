@@ -10,7 +10,7 @@ export default (env: BuildEnv) => {
     build: path.resolve(__dirname, 'dist'),
     html: path.resolve(__dirname, 'index.html'),
     src: path.resolve(__dirname, 'src'),
-    publicPath: '/',
+    publicPath: env.publicPath ?? '/',
   };
 
   const mode: BuildMode = env.mode || 'development';

@@ -1,22 +1,34 @@
-import Editor from './EnvEditor';
-import cls from './EnvPage.module.scss';
-import Files from './Files';
-import Generate from './Generate';
-import Prompt from './Prompt/Prompt';
+import aiStore from '@entities/ai';
+import filesStore from '@entities/files';
+import { useTrackMetaAndToast } from '@shared/hooks/useTrackMetaAndToast';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-const EnvPage = () => {
+import envPageStore from '../store';
+import Editor from './Editor';
+import cls from './EnvPage.module.scss';
+import Sidebar from './Sidebar';
+
+const EnvPage = observer(() => {
+  const { id } = useParams();
+
+  useEffect(() => {
+    envPageStore.setEnvId(id);
+    filesStore.getFiles(id);
+  }, [id]);
+
+  useTrackMetaAndToast({ network: filesStore.network });
+  useTrackMetaAndToast({ network: aiStore.network });
+
   return (
     <div className={cls.EnvPage}>
       <div className={cls.EnvPage__main}>
-        <Generate className={cls.EnvPage__generate}/>
+        <Sidebar />
         <Editor className={cls.EnvPage__editor} />
-        <Prompt />
-      </div>
-      <div className={cls.EnvPage__side}>
-        {/* <Files /> */}
       </div>
     </div>
   );
-};
+});
 
 export default EnvPage;
