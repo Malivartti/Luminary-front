@@ -1,12 +1,12 @@
 {
-  "name": "aisystem",
+  "name": "luminary",
   "version": "0.0.0",
-  "homepage": "https://malivartti.github.io/AISystem",
+  "homepage": "https://malivartti.github.io/Luminary",
   "scripts": {
     "dev": "webpack serve --env port=3000",
     "build:prod": "webpack --env mode=production",
     "build:dev": "webpack --env mode=development",
-    "predeploy": "yarn webpack --env mode=production --env publicPath=/AISystem/",
+    "predeploy": "yarn webpack --env mode=production --env publicPath=/Luminary/",
     "deploy": "gh-pages -d dist",
     "lint:ts": "eslint \"**/*.{ts,tsx}\"",
     "lint:ts:fix": "eslint \"**/*.{ts,tsx}\" --fix",
