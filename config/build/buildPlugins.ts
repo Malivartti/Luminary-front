@@ -1,3 +1,4 @@
+import Dotenv from 'dotenv-webpack';
 import HtmlWebpackPlagin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import webpack from 'webpack';
@@ -18,7 +19,8 @@ export function buildPlugins({ paths, isDev }: BuildOptions): webpack.WebpackPlu
     new webpack.DefinePlugin({
       __IS_DEV__: JSON.stringify(isDev),
       __PUBLIC_PATH__: JSON.stringify(paths.publicPath),
-    })
+    }),
+    new Dotenv()
   ];
 
   if (isDev) {
