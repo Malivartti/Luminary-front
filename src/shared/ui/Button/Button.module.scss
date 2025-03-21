@@ -1,5 +1,5 @@
 .Button {
-  padding: 14px 20px;
+  padding: 10px 20px;
   background: var(--brand-color);
   color: var(--neutral-color);
   cursor: pointer;
@@ -49,6 +49,14 @@
   &_loading {
     &:hover {
       background: var(--brand-color);
+    }
+  }
+
+  &_danger {
+    background: var(--danger-color);
+
+    &:hover {
+      background: var(--danger-hover-color);
     }
   }
 }

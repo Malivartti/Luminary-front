@@ -1,44 +1,43 @@
-export type UserApi = {
-  id: number;
-  email: string;
-  name: string;
-  role: Role;
-  avatar: string;
+export type AuthUserApi = {
+  token: string;
+  user: UserApi
 }
 
-export type UserModel = {
-  id: number;
-  email: string;
-  name: string;
-  role: Role;
-  avatar: string;
+export type UserApi = {
+  id: number; 
+  username: string; 
+  rubles_used: number;
+  role: UserRoleApi;
+}
+
+export type UserRoleApi = {
+  name: Role
+  rubles_limit: number
 }
 
 export enum Role {
-  admin = 'admin',
-  user = 'user',
-  guest = 'guest'
-}
+  DEMO = 'Demo',
+  GUEST = 'Guest',
+};
 
-export const normalizeUser = (raw: UserApi): UserModel => ({
-  ...raw,
-});
 
-export type UserApiReqCreate = {
-  name: string;
-  email: string;
+export type UserApiReqRegister = {
+  username: string;
   password: string;
-  avatar: string;
+  confirm_password: string;
 }
 
 export type UserApiReqUpdate = {
-  name?: string;
-  email?: string;
+  username?: string;
   password?: string;
-  avatar?: string;
 }
 
 export type UserApiReqLogin = {
-  email: string;
+  username: string;
   password: string;
 }
+
+export const normalizeUser = (raw: UserApi): UserApi => ({
+  ...raw,
+  rubles_used: Number(raw.rubles_used),
+});

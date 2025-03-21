@@ -1,4 +1,5 @@
 import NetworkStore from '@entities/network';
+import userStore from '@entities/user';
 import axios, { AxiosResponse } from 'axios';
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
@@ -9,113 +10,7 @@ type PrivateFields = '_envs' | '_env';
 
 class EnvsStore {
   private _env: EnvModel | null = null;
-  private _envs: EnvModel[] | null = [  
-    {
-      id: 1,
-      title: 'Что такое JavaScript?',
-      description: 'JavaScript — это язык программирования, используемый для создания интерактивных веб-страниц.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 2,
-      title: 'Основные типы данных в JavaScript',
-      description: 'Основные типы данных в JavaScript включают Number, String, Boolean, null, undefined, Symbol, и BigInt.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 3,
-      title: 'Что такое переменная?',
-      description: 'Переменная — это именованное место в памяти компьютера, где хранится значение.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 4,
-      title: 'Как объявить переменную в JavaScript?',
-      description: 'Переменные в JavaScript объявляются с помощью ключевых слов `var`, `let`, или `const`.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 5,
-      title: 'В чем разница между `let` и `const`?',
-      description: '`let` объявляет переменную, значение которой может быть изменено, а `const` объявляет константу, значение которой неизменно после инициализации.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 6,
-      title: 'Что такое оператор присваивания?',
-      description: 'Оператор присваивания (`=`) используется для присвоения значения переменной.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 7,
-      title: 'Что такое условный оператор `if`?',
-      description: 'Условный оператор `if` выполняет блок кода только если условие истинно.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 8,
-      title: 'Что такое цикл `for`?',
-      description: 'Цикл `for` повторяет блок кода определенное количество раз.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 9,
-      title: 'Что такое цикл `while`?',
-      description: 'Цикл `while` повторяет блок кода пока условие истинно.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 10,
-      title: 'Что такое функция?',
-      description: 'Функция — это блок кода, который выполняет определенную задачу.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 11,
-      title: 'Как объявить функцию в JavaScript?',
-      description: 'Функция объявляется с помощью ключевого слова `function`, за которым следует имя функции, параметры в скобках и тело функции в фигурных скобках.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 12,
-      title: 'Что такое массив?',
-      description: 'Массив — это упорядоченная коллекция элементов.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 13,
-      title: 'Как создать массив в JavaScript?',
-      description: 'Массив создается с помощью квадратных скобок `[]`.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 14,
-      title: 'Что такое объект?',
-      description: 'Объект — это неупорядоченная коллекция пар "ключ-значение".',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 15,
-      title: 'Как создать объект в JavaScript?',
-      description: 'Объект создается с помощью фигурных скобок `{}`.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-  ];
+  private _envs: EnvModel[] | null = [];
   readonly network = new NetworkStore();
 
   constructor() {
@@ -146,7 +41,11 @@ class EnvsStore {
     const url = endpoints.getOne(id);
 
     try {
-      const res: AxiosResponse<EnvApi> = await axios.get(url);
+      const res: AxiosResponse<EnvApi> = await axios.get(url, {
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
       runInAction(() => {
         this._env = normalizeEnv(res.data);
         this.network.success();
@@ -165,9 +64,14 @@ class EnvsStore {
     const url = endpoints.get();
     
     try {
-      const res: AxiosResponse<EnvApi[]> = await axios.get(url);
+      const res: AxiosResponse<EnvApi[]> = await axios.get(url, {
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
       runInAction(() => {
         this._envs = normalizeEnvs(res.data);
+        console.log(res.data)
         this.network.success();
       });
     } catch(e) {
@@ -182,12 +86,13 @@ class EnvsStore {
     this.network.loading();
     this._env = null;
     const url = endpoints.create();
-
     try {
-      await axios.post(url, {
-        data,
+      await axios.post(url, data, {
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
       });
-      this.network.success();
+      this.network.success('Окружение создано');
     } catch(e) {
       runInAction(() => {
         this.network.error('Не удалось создать окружение');
@@ -202,10 +107,12 @@ class EnvsStore {
     const url = endpoints.update(id);
 
     try {
-      await axios.put(url, {
-        data,
+      await axios.put(url, data, {
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
       });
-      this.network.success();
+      this.network.success('Окружение успешно изменено');
     } catch(e) {
       runInAction(() => {
         this.network.error('Не удалось обновить окружение');
@@ -220,7 +127,11 @@ class EnvsStore {
     const url = endpoints.delete(id);
 
     try {
-      await axios.delete(url);
+      await axios.delete(url, {
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
       runInAction(() => {
         this.network.success('Окружение успешно удалено');
       });

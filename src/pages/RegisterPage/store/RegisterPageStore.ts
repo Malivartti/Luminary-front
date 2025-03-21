@@ -1,17 +1,13 @@
-import userStore, { UserApiReqCreate } from '@entities/user';
-import { onlyLatinLettersAndNumbers, validateEmailString, validateUrlString } from '@shared/lib/validate';
+import userStore, { UserApiReqRegister } from '@entities/user';
+import { onlyLatinLettersAndNumbers } from '@shared/lib/validate';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-type PrivateField = '_avatar' | '_avatarError' | '_name' | '_nameError' | '_email' | '_emailError' | '_password' 
+type PrivateField = '_username' | '_usernameError' | '_password' 
                   | '_passwordError' | '_passwordRepeat' | '_passwordRepeatError'
 
 class RegisterPageStore {
-  private _avatar: string = '';
-  private _avatarError: string = '';
-  private _name: string = '';
-  private _nameError: string = '';
-  private _email: string = '';
-  private _emailError: string = '';
+  private _username: string = '';
+  private _usernameError: string = '';
   private _password: string = '';
   private _passwordError: string = '';
   private _passwordRepeat: string = '';
@@ -19,34 +15,22 @@ class RegisterPageStore {
 
   constructor() {
     makeObservable<RegisterPageStore, PrivateField>(this, {
-      _avatar: observable,
-      _avatarError: observable,
-      _name: observable,
-      _nameError: observable,
-      _email: observable,
-      _emailError: observable,
+      _username: observable,
+      _usernameError: observable,
       _password: observable,
       _passwordError: observable,
       _passwordRepeat: observable,
       _passwordRepeatError: observable,
-      avatar: computed,
-      avatarError: computed,
-      name: computed,
-      nameError: computed,
-      email: computed,
-      emailError: computed,
+      username: computed,
+      usernameError: computed,
       password: computed,
       passwordError: computed,
       passwordRepeat: computed,
       passwordRepeatError: computed,
-      setAvatar: action.bound,
-      setName: action.bound,
-      setEmail: action.bound,
+      setUsername: action.bound,
       setPassword: action.bound,
       setPasswordRepeat: action.bound,
-      validateAvatar: action,
       validateName: action,
-      validateEmail: action,
       validatePassword: action,
       validatePasswordRepeat: action,
       isValid: action,
@@ -54,28 +38,12 @@ class RegisterPageStore {
     });
   }
 
-  get avatar(): string {
-    return this._avatar;
+  get username(): string {
+    return this._username;
   }
 
-  get avatarError(): string {
-    return this._avatarError;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get nameError(): string {
-    return this._nameError;
-  }
-
-  get email(): string {
-    return this._email;
-  }
-
-  get emailError(): string {
-    return this._emailError;
+  get usernameError(): string {
+    return this._usernameError;
   }
 
   get password(): string {
@@ -94,25 +62,11 @@ class RegisterPageStore {
     return this._passwordRepeatError;
   }
 
-  setAvatar(avatar: string): void {
-    if (this._avatarError) {
-      this._avatarError = '';
+  setUsername(username: string): void {
+    if (this._usernameError) {
+      this._usernameError = '';
     }
-    this._avatar = avatar;
-  }
-
-  setName(name: string): void {
-    if (this._nameError) {
-      this._nameError = '';
-    }
-    this._name = name;
-  }
-
-  setEmail(email: string): void {
-    if (this._emailError) {
-      this._emailError = '';
-    }
-    this._email = email;
+    this._username = username;
   }
 
   setPassword(password: string): void {
@@ -129,33 +83,9 @@ class RegisterPageStore {
     this._passwordRepeat = passwordRepeat;
   }
 
-  validateAvatar(): boolean {
-    if (!this._avatar.trim()) {
-      this._avatarError = 'Введите ссылку на изображение';
-      return;
-    }
-    if (!validateUrlString(this._avatar)) {
-      this._avatarError = 'Неверный формат';
-      return;
-    }
-    return true;
-  }
-
   validateName(): boolean {
-    if (!this._name.trim()) {
-      this._nameError = 'Введите имя';
-      return;
-    }
-    return true;
-  }
-
-  validateEmail(): boolean {
-    if (!this._email.trim()) {
-      this._emailError = 'Введите почту';
-      return;
-    }
-    if (!validateEmailString(this._email)) {
-      this._emailError = 'Неверный формат';
+    if (!this._username.trim()) {
+      this._usernameError = 'Введите имя';
       return;
     }
     return true;
@@ -190,26 +120,23 @@ class RegisterPageStore {
   }
 
   isValid(): boolean {
-    const isAvatarValide = this.validateAvatar();
     const isNameValide = this.validateName();
-    const isEmailValid = this.validateEmail();
     const isPasswordValid = this.validatePassword();
     const isPasswordRepeatValid = this.validatePasswordRepeat();
 
-    return isAvatarValide && isNameValide && isEmailValid && isPasswordValid && isPasswordRepeatValid;
+    return isNameValide && isPasswordValid && isPasswordRepeatValid;
   }
 
   async register(): Promise<void> {
     if (!this.isValid()) return;
 
-    const data: UserApiReqCreate = {
-      avatar: this._avatar,
-      name: this._name,
-      email: this._email,
+    const data: UserApiReqRegister = {
+      username: this._username,
       password: this._password,
+      confirm_password: this._passwordRepeat,
     };
 
-    await userStore.createUser(data);
+    await userStore.registerUser(data);
   }
 }
 

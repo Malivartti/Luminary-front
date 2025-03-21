@@ -28,4 +28,17 @@
     margin-top: 15px;
     justify-self: end;
   }
+
+  &__input {
+    border: 1px solid var(--secondary-color)
+  }
+
+  &__send-btn {
+    padding: 5px;
+  }
+
+  &__send-icon {
+    width: 20px;
+    height: 20px;
+  }
 }

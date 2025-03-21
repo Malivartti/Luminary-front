@@ -8,7 +8,7 @@ type AccessComponentProps = {
 }
 
 const AccessComponent: FC<AccessComponentProps> = observer(({ roles, children }) => {
-  const userRole = userStore.user?.role ?? Role.guest;
+  const userRole = userStore.user?.role.name ?? Role.GUEST;
 
   if (roles.includes(userRole)) {
     return children;

@@ -1,40 +1,40 @@
 import userStore, { UserApiReqLogin } from '@entities/user';
-import { onlyLatinLettersAndNumbers, validateEmailString } from '@shared/lib/validate';
+import { onlyLatinLettersAndNumbers } from '@shared/lib/validate';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-type PrivateField = '_email' | '_emailError' | '_password' | '_passwordError'
+type PrivateField = '_username' | '_usernameError' | '_password' | '_passwordError'
 
 class LoginPageStore {
-  private _email: string = '';
-  private _emailError: string = '';
+  private _username: string = '';
+  private _usernameError: string = '';
   private _password: string = '';
   private _passwordError: string = '';
 
   constructor() {
     makeObservable<LoginPageStore, PrivateField>(this, {
-      _email: observable,
-      _emailError: observable,
+      _username: observable,
+      _usernameError: observable,
       _password: observable,
       _passwordError: observable,
-      email: computed,
-      emailError: computed,
+      username: computed,
+      usernameError: computed,
       password: computed,
       passwordError: computed,
-      setEmail: action.bound,
+      setUsername: action.bound,
       setPassword: action.bound,
-      validateEmail: action,
+      validateUsername: action,
       validatePassword: action,
       isValid: action,
       login: action,
     });
   }
 
-  get email(): string {
-    return this._email;
+  get username(): string {
+    return this._username;
   }
 
-  get emailError(): string {
-    return this._emailError;
+  get usernameError(): string {
+    return this._usernameError;
   }
 
   get password(): string {
@@ -45,11 +45,11 @@ class LoginPageStore {
     return this._passwordError;
   }
 
-  setEmail(email: string): void {
-    if (this._emailError) {
-      this._emailError = '';
+  setUsername(username: string): void {
+    if (this._usernameError) {
+      this._usernameError = '';
     }
-    this._email = email;
+    this._username = username;
   }
 
   setPassword(password: string): void {
@@ -59,13 +59,9 @@ class LoginPageStore {
     this._password = password;
   }
 
-  validateEmail(): boolean {
-    if (!this._email.trim()) {
-      this._emailError = 'Введите почту';
-      return;
-    }
-    if (!validateEmailString(this._email)) {
-      this._emailError = 'Неверный формат';
+  validateUsername(): boolean {
+    if (!this._username.trim()) {
+      this._usernameError = 'Введите имя';
       return;
     }
     return true;
@@ -88,17 +84,17 @@ class LoginPageStore {
   }
 
   isValid(): boolean {
-    const isEmailValid = this.validateEmail();
+    const isUsernameValid = this.validateUsername();
     const isPasswordValid = this.validatePassword();
 
-    return isEmailValid && isPasswordValid;
+    return isUsernameValid && isPasswordValid;
   } 
 
   async login(): Promise<void> {
     if (!this.isValid()) return;
 
     const data: UserApiReqLogin = {
-      email: this._email,
+      username: this._username,
       password: this._password,
     };
 

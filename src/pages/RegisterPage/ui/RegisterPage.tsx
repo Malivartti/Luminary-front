@@ -15,20 +15,19 @@ const RegisterPage = observer(() => {
   const registerPageStore = useLocalObservable(() => new RegisterPageStore());
   const navigate = useNavigate();
 
-  const onSuccess = useCallback(() => {
-    navigate(AppRouteUrls.root);
-  }, [navigate]);
-
-  const onSubmit = useCallback((e: FormEvent) => {
+  const onSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
-    registerPageStore.register();
-  }, [registerPageStore]);
+    await registerPageStore.register();
+
+    if (userStore.network.isError) return;
+    navigate(AppRouteUrls.root);
+  }, [registerPageStore, navigate]);
 
   const toLogin = useCallback(() => {
     navigate(AppRouteUrls.login.create());
   }, [navigate]);
 
-  useTrackMetaAndToast({ network: userStore.network, onSuccess });
+  useTrackMetaAndToast({ network: userStore.network });
 
   return (
     <div className={cls.RegisterPage}>
@@ -40,33 +39,13 @@ const RegisterPage = observer(() => {
         >
           Регистрация
         </Text>
-        <div
-          className={cls.RegisterPage__avatar}
-          style={{ backgroundImage: `url(${registerPageStore.avatar})` }}
-        ></div>
-        <Input 
-          className={cls.RegisterPage__input}
-          type='text' 
-          value={registerPageStore.avatar} 
-          onChange={registerPageStore.setAvatar}
-          error={registerPageStore.avatarError}
-          placeholder='Ссылка на изображение'
-        />
         <Input 
           className={cls.RegisterPage__input}
           type="text" 
-          value={registerPageStore.name} 
-          onChange={registerPageStore.setName}
-          error={registerPageStore.nameError}
+          value={registerPageStore.username} 
+          onChange={registerPageStore.setUsername}
+          error={registerPageStore.usernameError}
           placeholder='Имя'
-        />
-        <Input 
-          className={cls.RegisterPage__input}
-          type="email" 
-          value={registerPageStore.email} 
-          onChange={registerPageStore.setEmail}
-          error={registerPageStore.emailError}
-          placeholder='Почта'
         />
         <Input 
           className={cls.RegisterPage__input}

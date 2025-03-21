@@ -14,9 +14,15 @@ const EnvPage = observer(() => {
   const { id } = useParams();
 
   useEffect(() => {
+    envPageStore.setSheet('');
     envPageStore.setEnvId(id);
-    filesStore.getFiles(id);
+    envPageStore.defaultEnv();
+    envPageStore.getEnv();
+    envPageStore.getFiles();
+    aiStore.getContext(id);
+    aiStore.getAIModels();
   }, [id]);
+
 
   useTrackMetaAndToast({ network: filesStore.network });
   useTrackMetaAndToast({ network: aiStore.network });

@@ -15,20 +15,19 @@ const LoginPage = observer(() => {
   const loginPageStore = useLocalObservable(() => new LoginPageStore());
   const navigate = useNavigate();
 
-  const onSubmit = useCallback((e: FormEvent) => {
+  const onSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
-    loginPageStore.login();
-  }, [loginPageStore]);
+    await loginPageStore.login();
+
+    if (userStore.network.isError) return;
+    navigate(AppRouteUrls.root);
+  }, [loginPageStore, navigate]);
 
   const toRegister = useCallback(() => {
     navigate(AppRouteUrls.register.create());
   }, [navigate]);
 
-  const onSuccess = useCallback(() => {
-    navigate(AppRouteUrls.root);
-  }, [navigate]);
-
-  useTrackMetaAndToast({ network: userStore.network, onSuccess });
+  useTrackMetaAndToast({ network: userStore.network });
 
   return (
     <div className={cls.LoginPage}>
@@ -42,11 +41,11 @@ const LoginPage = observer(() => {
         </Text>
         <Input 
           className={cls.LoginPage__input}
-          type="email" 
-          value={loginPageStore.email} 
-          onChange={loginPageStore.setEmail}
-          error={loginPageStore.emailError}
-          placeholder='Почта'
+          type="text" 
+          value={loginPageStore.username} 
+          onChange={loginPageStore.setUsername}
+          error={loginPageStore.usernameError}
+          placeholder='Имя'
         />
         <Input
           className={cls.LoginPage__input}

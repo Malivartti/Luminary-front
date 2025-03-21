@@ -11,4 +11,16 @@
   &__list {
     flex-grow: 1;
   }
+
+  &__form {
+    display: flex;
+  }
+
+  &__input {
+    width: 100%;
+  }
+
+  &__btn {
+    margin-bottom: 15px;
+  }
 }

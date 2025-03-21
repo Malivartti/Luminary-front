@@ -41,4 +41,3 @@ export const useTrackMetaAndToast = ({
     };
   }, [ network, onError, onSuccess ]);
 };
-

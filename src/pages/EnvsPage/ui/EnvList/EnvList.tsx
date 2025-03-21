@@ -11,6 +11,7 @@ import EnvCreate from '../EnvCreate';
 import cls from './EnvList.module.scss';
 
 const EnvList = observer(() => {
+
   return (
     <div className={cls.EnvList}>
       <EnvCreate />

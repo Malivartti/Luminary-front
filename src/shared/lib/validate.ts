@@ -12,3 +12,8 @@ export const validateUrlString = (value: string): boolean => {
   const regex = /^https?:\/\/\S+/i;
   return regex.test(value);
 };
+
+export const validateUrlId = (value: string): boolean => {
+  const regex = /^\/envs\/\d+$/;
+  return regex.test(value);
+};

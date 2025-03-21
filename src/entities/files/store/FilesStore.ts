@@ -1,14 +1,15 @@
 import NetworkStore from '@entities/network';
+import userStore from '@entities/user';
 import axios, { AxiosResponse } from 'axios';
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { endpoints } from '../api';
-import { FileApi, FileApiReq, FileApiReqLoad, FileModel, normalizeFiles } from '../model';
+import { FileApi, FileApiReqLoad, FileApiReqUpdate, FileModel, MetaFileApi, MetaFileModel, normalizeFiles } from '../model';
 
 type PrivateFields = '_files' | '_file'
 
 class FilesStore {
-  private _files: FileModel[] | null = null;
+  private _files: MetaFileModel[] | null = null;
   private _file: FileModel | null = null;
   readonly network = new NetworkStore();
 
@@ -21,12 +22,12 @@ class FilesStore {
       getFiles: action,
       getFile: action,
       loadFile: action,
-      // updateFile: action,
-      // deleteFile: action,
+      updateFile: action,
+      deleteFile: action,
     });
   }
 
-  get files(): FileModel[] {
+  get files(): MetaFileModel[] {
     return this._files;
   }
 
@@ -39,7 +40,11 @@ class FilesStore {
     const url = endpoints.get(id);
 
     try {
-      const res: AxiosResponse<FileApi[]> = await axios.get(url);
+      const res: AxiosResponse<MetaFileApi[]> = await axios.get(url, {
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
       runInAction(() => {
         this._files = normalizeFiles(res.data);
         this.network.success();
@@ -52,12 +57,19 @@ class FilesStore {
     }
   }
 
-  async getFile(id: string | number, data: FileApiReq) {
+  async getFile(id: string | number, filename: string) {
     this.network.loading();
     const url = endpoints.getOne(id);
 
     try {
-      const res: AxiosResponse<FileApi> = await axios.get(url, { data });
+      const res: AxiosResponse<FileApi> = await axios.get(url, {
+        params: {
+          filename,
+        },
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
       runInAction(() => {
         this._file = res.data;
         this.network.success();
@@ -70,25 +82,72 @@ class FilesStore {
     }
   }
 
-  async loadFile(id: string | number, data: FileApiReqLoad) {
-    this.network.loading();
+  async loadFile(id: string | number, data: FileApiReqLoad, network: NetworkStore) {
+    network.loading();
     const url = endpoints.load(id);
     
     try {
-      await axios.post(url, {
-        data,
+      await axios.post(url, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
+      runInAction(() => {
+        network.success();
+      });
+    } catch (e) {
+      runInAction(() => {
+        network.error('Не удалось выгрузить файл');
+      });
+      console.log(e);
+    }
+  }
+
+  async deleteFile(id: string | number, filename: string) {
+    const url = endpoints.delete(id);
+
+    try {
+      await axios.delete(url, {
+        params: {
+          filename,
+        },
+        headers: {
+          Authorization: `Token ${userStore.token}`,
+        },
       });
       runInAction(() => {
         this.network.success();
       });
     } catch (e) {
       runInAction(() => {
-        this.network.error('Не удалось выгрузить файл');
+        this.network.error('Не удалось удалить файл');
       });
       console.log(e);
     }
   }
 
+  async updateFile(id: number | string, data: FileApiReqUpdate): Promise<void> {
+    this.network.loading();
+    const url = endpoints.update(id);
+
+    try {
+      await axios.post(url, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Token ${userStore.token}`,
+        },
+      });
+      runInAction(() => {
+        this.network.success();
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.network.error('Не удалось сохранить файл');
+      });
+      console.log(e);
+    }
+  }
 }
 
 export default FilesStore;

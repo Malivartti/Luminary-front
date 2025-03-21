@@ -44,13 +44,17 @@ class NetworkStore {
   }
 
   success(message: string = ''): void {
-    this._message = message;
-    this._meta = Meta.success;
+    setTimeout(() => {
+      this._message = message;
+      this._meta = Meta.success;
+    }, 500);
   }
 
   error(message: string = ''): void {
-    this._message = message;
-    this._meta = Meta.error;
+    setTimeout(() => {
+      this._message = message;
+      this._meta = Meta.error;
+    }, 500);
   }
 }
 

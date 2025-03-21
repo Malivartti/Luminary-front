@@ -1,6 +1,7 @@
 import './styles/index.scss';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-quill/dist/quill.snow.css';
 
 import RootLayout from '@widgets/RootLayout';
 import { SkeletonTheme } from 'react-loading-skeleton';

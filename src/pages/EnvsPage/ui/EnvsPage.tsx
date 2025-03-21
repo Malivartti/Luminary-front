@@ -8,9 +8,9 @@ import cls from './EnvsPage.module.scss';
 
 const EnvsPage = () => {
   useEffect(() => {
-    // envsStore.getEnvs();
-  }, []);
-  
+    envsStore.getEnvs();
+  }, []);  
+
   useTrackMetaAndToast({ network: envsStore.network });
 
   return (

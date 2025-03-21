@@ -8,10 +8,13 @@ import cls from './Message.module.scss';
 
 type Props = {
   text: string;
+  role: 'user' | 'assistant'
   sendedAt: Date;
+  cost?: number;
+  model?: string
 }
 
-const Message: FC<Props> = ({ text, sendedAt }) => {
+const Message: FC<Props> = ({ text, sendedAt, cost, model }) => {
   const [isCopyed, setIsCopyed] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -21,8 +24,8 @@ const Message: FC<Props> = ({ text, sendedAt }) => {
   }, [text]);
 
   return (
-    <div className={cls.Message}>
-      <Text view='p-16'>{text}</Text>
+    <div className={cls.Message} >
+      <Text className={cls.Message__text} view='p-16'>{text}</Text>
       <div className={cls.Message__footer}>
         <button
           className={cls.Message__copy} 
@@ -35,7 +38,11 @@ const Message: FC<Props> = ({ text, sendedAt }) => {
               : <CopyIcon />
           }
         </button>
-        <Text view="p-14" color="secondary">{formatDDMMYYYYHHMM(sendedAt)}</Text>
+        <div className={cls.Message__meta}>
+          <Text view="p-14" color="secondary">Доставлено: {formatDDMMYYYYHHMM(sendedAt)}</Text>
+          {model && <Text view="p-14" color="secondary">Модель: {model}</Text>}
+          {cost && <Text view="p-14" color="secondary">Стоимость: {cost}</Text>}
+        </div>
       </div>
     </div>
   );

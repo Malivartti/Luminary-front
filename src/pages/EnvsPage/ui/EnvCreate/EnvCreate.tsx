@@ -11,7 +11,7 @@ const EnvCreate = observer(() => {
 
   const handleClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    envsPageStore.setIsOpenModal(true);
+    envsPageStore.openModal();
   }, []);
 
   return (

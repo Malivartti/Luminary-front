@@ -5,11 +5,20 @@
   flex-direction: column;
   border-radius: 4px;
 
+  &__text {
+    white-space: pre-line;
+  }
+
   &__footer {
     margin-top: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
   }
 
   &__copy {

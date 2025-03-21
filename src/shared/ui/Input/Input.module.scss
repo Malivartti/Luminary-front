@@ -34,12 +34,12 @@
   }
 
   &_error {
-    border: 1px solid var(--error-color);
+    border: 1px solid var(--danger-color);
   }
 
   &__error {
     margin-top: 8px;
-    color: var(--error-color);
+    color: var(--danger-color);
     transition: color var(--transition-color-ms) linear;
   }
 }

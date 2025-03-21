@@ -1,6 +1,7 @@
 import { useTheme } from '@app/providers/ThemeProvider';
+import userStore from '@entities/user';
 import classNames from 'classnames';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useLayoutEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import ContainerLayout from '../ContainerLayout';
@@ -12,6 +13,10 @@ type RootLayoutProps = {
 
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const { theme } = useTheme();
+
+  useLayoutEffect(() => {
+    userStore.getUser();
+  }, []);
 
   return (
     <div className={classNames('app', theme)}>
